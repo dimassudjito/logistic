@@ -10,5 +10,27 @@ module.exports = {
         throw new Error(err)
       }
     }
+  },
+  Mutation: {
+    async createProduct(
+      _: any,
+      {
+        productInput: { name, category, manufacturer, location }
+      }: {
+        productInput: {
+          name: string
+          category: string
+          manufacturer: string
+          location: string
+        }
+      }
+    ) {
+      if (name.trim() === '') {
+        throw new Error('Product name must not be empty')
+      }
+      const newProduct = new Product({ name, category, manufacturer, location })
+      const product = await newProduct.save()
+      return product
+    }
   }
 }
