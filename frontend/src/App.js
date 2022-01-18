@@ -35,10 +35,8 @@ const emptyProductForm = {
 
 function App() {
   const [createProductForm, setCreateProductForm] = useState(emptyProductForm)
-  const [editProductForm, setEditProductForm] = useState({
-    ...emptyProductForm,
-    id: ''
-  })
+  const [editProductForm, setEditProductForm] = useState(emptyProductForm)
+  const [editedProduct, setEditedProduct] = useState('')
 
   const products = useQuery(GET_PRODUCTS)
   const [createProduct] = useMutation(CREATE_PRODUCT, {
@@ -64,6 +62,7 @@ function App() {
       <table>
         <tbody>
           <tr>
+            <th>ID</th>
             <th>Product Name</th>
             <th>Category</th>
             <th>Manufacturer</th>
@@ -75,6 +74,7 @@ function App() {
           {products.loading === false
             ? products.data.getProducts.map((product) => (
                 <tr key={product.id}>
+                  <td>{product.id ? product.id : '(Empty)'}</td>
                   <td>{product.name ? product.name : '(Empty)'}</td>
                   <td>{product.category ? product.category : '(Empty)'}</td>
                   <td>
@@ -93,7 +93,14 @@ function App() {
                     </button>
                   </td>
                   <td>
-                    <button>Edit</button>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault()
+                        setEditedProduct(product.id)
+                      }}
+                    >
+                      Edit
+                    </button>
                   </td>
                 </tr>
               ))
@@ -144,7 +151,11 @@ function App() {
       <hr />
       {/* Form to edit product  */}
       <h1>Edit a product</h1>
+      <p>Select a product from the product table</p>
       <form>
+        <label>Selected product ID</label>
+        <input disabled value={editedProduct} />
+        <br />
         <label>Product Name*</label>
         <input
           name="name"
