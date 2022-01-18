@@ -15,7 +15,7 @@ module.exports = {
     async createProduct(
       _: any,
       {
-        productInput: { name, category, manufacturer, location }
+        productInput
       }: {
         productInput: {
           name: string
@@ -26,15 +26,10 @@ module.exports = {
       }
     ) {
       try {
-        if (name.trim() === '') {
+        if (productInput.name.trim() === '') {
           throw new Error('Product name must not be empty')
         }
-        const newProduct = new Product({
-          name,
-          category,
-          manufacturer,
-          location
-        })
+        const newProduct = new Product(productInput)
         const product = await newProduct.save()
         return product
       } catch (err: any) {
