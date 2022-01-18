@@ -31,6 +31,15 @@ module.exports = {
       const newProduct = new Product({ name, category, manufacturer, location })
       const product = await newProduct.save()
       return product
+    },
+    async deleteProduct(_: any, { productId }: { productId: string }) {
+      try {
+        const product = await Product.findById(productId)
+        await product.delete()
+        return 'Product deleted successfully'
+      } catch (err: any) {
+        throw new Error(err)
+      }
     }
   }
 }
