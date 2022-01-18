@@ -9,5 +9,8 @@ module.exports = {
   Mutation: {
     ...productsResolvers.Mutation,
     ...locationsResolvers.Mutation
+  },
+  Product: {
+    ...locationsResolvers.Product
   }
 }

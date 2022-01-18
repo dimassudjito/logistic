@@ -21,7 +21,6 @@ module.exports = {
       _: any,
       { locationInput }: { locationInput: LocationInput }
     ) {
-      console.log(locationInput)
       try {
         if (!locationInput.name || locationInput.name.trim() === '') {
           throw new Error('Location name must not be null or empty')
@@ -29,6 +28,20 @@ module.exports = {
         const newLocation = new ProductLocation(locationInput)
         const location = await newLocation.save()
         return location
+      } catch (err: any) {
+        throw new Error(err)
+      }
+    }
+  },
+  Product: {
+    locationInfo: async ({ location: locationId }: { location: string }) => {
+      try {
+        if (locationId) {
+          const location = await ProductLocation.findOne({ _id: locationId })
+          return location
+        } else {
+          return null
+        }
       } catch (err: any) {
         throw new Error(err)
       }

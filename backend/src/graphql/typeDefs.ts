@@ -7,6 +7,7 @@ module.exports = gql`
     category: String
     manufacturer: String
     location: String
+    locationInfo: Location
   }
   type Location {
     id: ID!
