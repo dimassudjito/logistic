@@ -34,9 +34,11 @@ module.exports = {
     }
   },
   Product: {
+    // resolver for locationInfo field in Product
     locationInfo: async ({ location: locationId }: { location: string }) => {
       try {
         if (locationId) {
+          // return Location that matches locationId in the Product
           const location = await ProductLocation.findOne({ _id: locationId })
           return location
         } else {

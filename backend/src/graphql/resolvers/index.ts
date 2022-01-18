@@ -10,6 +10,7 @@ module.exports = {
     ...productsResolvers.Mutation,
     ...locationsResolvers.Mutation
   },
+  // resolver for fields in Product
   Product: {
     ...locationsResolvers.Product
   }
