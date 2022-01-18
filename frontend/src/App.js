@@ -109,6 +109,14 @@ function App() {
                       onClick={(e) => {
                         e.preventDefault()
                         setEditedProduct(product.id)
+                        setEditProductForm({
+                          name: product.name,
+                          category: product.category ? product.category : '',
+                          manufacturer: product.manufacturer
+                            ? product.manufacturer
+                            : '',
+                          location: product.location ? product.location : ''
+                        })
                       }}
                     >
                       Edit
