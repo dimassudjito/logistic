@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { gql, useQuery, useMutation } from '@apollo/client'
 
+// graphql query for products
 const GET_PRODUCTS = gql`
   query GetProducts {
     getProducts {
@@ -41,6 +42,7 @@ const UPDATE_PRODUCT = gql`
     }
   }
 `
+// graphql query for location
 const GET_LOCATIONS = gql`
   query GetLocations {
     getLocations {
@@ -72,12 +74,13 @@ const emptyLocationForm = {
 }
 
 function App() {
+  // form states
   const [createProductForm, setCreateProductForm] = useState(emptyProductForm)
   const [editProductForm, setEditProductForm] = useState(emptyProductForm)
   const [editedProduct, setEditedProduct] = useState('')
   const [createLocationForm, setCreateLocationForm] =
     useState(emptyLocationForm)
-
+  // query and mutation for products
   const products = useQuery(GET_PRODUCTS)
   const [createProduct] = useMutation(CREATE_PRODUCT, {
     refetchQueries: [GET_PRODUCTS]
@@ -88,22 +91,20 @@ function App() {
   const [deleteProduct] = useMutation(DELETE_PRODUCT, {
     refetchQueries: [GET_PRODUCTS]
   })
-
+  // query and mutatin for locations
   const locations = useQuery(GET_LOCATIONS)
   const [createLocation] = useMutation(CREATE_LOCATION, {
     refetchQueries: [GET_LOCATIONS]
   })
-
+  // form handler to bind data
   const createProductHandler = (evt) => {
     const value = evt.target.value
     setCreateProductForm({ ...createProductForm, [evt.target.name]: value })
   }
-
   const editProductHandler = (evt) => {
     const value = evt.target.value
     setEditProductForm({ ...editProductForm, [evt.target.name]: value })
   }
-
   const createLocationHandler = (evt) => {
     const value = evt.target.value
     setCreateLocationForm({ ...createLocationForm, [evt.target.name]: value })
