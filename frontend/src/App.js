@@ -26,7 +26,7 @@ const DELETE_PRODUCT = gql`
   }
 `
 
-const emptyCreateProductForm = {
+const emptyProductForm = {
   name: '',
   category: '',
   manufacturer: '',
@@ -34,9 +34,11 @@ const emptyCreateProductForm = {
 }
 
 function App() {
-  const [createProductForm, setCreateProductForm] = useState(
-    emptyCreateProductForm
-  )
+  const [createProductForm, setCreateProductForm] = useState(emptyProductForm)
+  const [editProductForm, setEditProductForm] = useState({
+    ...emptyProductForm,
+    id: ''
+  })
 
   const products = useQuery(GET_PRODUCTS)
   const [createProduct] = useMutation(CREATE_PRODUCT, {
@@ -49,6 +51,11 @@ function App() {
   const createProductHandler = (evt) => {
     const value = evt.target.value
     setCreateProductForm({ ...createProductForm, [evt.target.name]: value })
+  }
+
+  const editProductHandler = (evt) => {
+    const value = evt.target.value
+    setEditProductForm({ ...editProductForm, [evt.target.name]: value })
   }
 
   return (
@@ -100,7 +107,7 @@ function App() {
         onSubmit={(e) => {
           e.preventDefault()
           createProduct({ variables: { productInput: createProductForm } })
-          setCreateProductForm(emptyCreateProductForm)
+          setCreateProductForm(emptyProductForm)
         }}
       >
         <label>Product Name*</label>
@@ -137,28 +144,46 @@ function App() {
       <hr />
       {/* Form to edit product  */}
       <h1>Edit a product</h1>
-      <label>Product Name*</label>
-      <input />
-      <br />
-      <label>Category</label>
-      <input />
-      <br />
-      <label>Manufacturer</label>
-      <input />
-      <br />
-      <label>Location</label>
-      <input />
-      <br />
-      <button>Submit</button>
-      <hr />
-      <h1>Add a location</h1>
-      <label>Location Name*</label>
-      <input />
-      <br />
-      <label>City</label>
-      <input />
-      <br />
-      <button>Submit</button>
+      <form>
+        <label>Product Name*</label>
+        <input
+          name="name"
+          value={editProductForm.name}
+          onChange={editProductHandler}
+        />
+        <br />
+        <label>Category</label>
+        <input
+          name="category"
+          value={editProductForm.category}
+          onChange={editProductHandler}
+        />
+        <br />
+        <label>Manufacturer</label>
+        <input
+          name="manufacturer"
+          value={editProductForm.manufacturer}
+          onChange={editProductHandler}
+        />
+        <br />
+        <label>Location</label>
+        <input
+          name="location"
+          value={editProductForm.location}
+          onChange={editProductHandler}
+        />
+        <br />
+        <button>Submit</button>
+        <hr />
+        <h1>Add a location</h1>
+        <label>Location Name*</label>
+        <input />
+        <br />
+        <label>City</label>
+        <input />
+        <br />
+        <button type="submit">Submit</button>
+      </form>
     </div>
   )
 }
