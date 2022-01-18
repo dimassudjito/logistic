@@ -1,5 +1,5 @@
-import React from 'react'
-import { useQuery, gql } from '@apollo/client'
+import React, { useState } from 'react'
+import { gql, useQuery, useMutation } from '@apollo/client'
 
 const GET_PRODUCTS = gql`
   query GetProducts {
@@ -11,55 +11,102 @@ const GET_PRODUCTS = gql`
     }
   }
 `
+const CREATE_PRODUCT = gql`
+  mutation CreateProduct($productInput: ProductInput) {
+    createProduct(productInput: $productInput) {
+      category
+      name
+      manufacturer
+    }
+  }
+`
 
 function App() {
-  const { data } = useQuery(GET_PRODUCTS)
-  console.log(data.getProducts)
+  const [createProductForm, setCreateProductForm] = useState({
+    name: '',
+    category: '',
+    manufacturer: '',
+    location: ''
+  })
+
+  const products = useQuery(GET_PRODUCTS)
+  const [createProduct, createProductMetadata] = useMutation(CREATE_PRODUCT)
+
+  const createProductHandler = (evt) => {
+    const value = evt.target.value
+    setCreateProductForm({ ...createProductForm, [evt.target.name]: value })
+  }
+
   return (
     <div>
       {/* Display list of products */}
       <table>
-        <tr>
-          <th>Product Name</th>
-          <th>Category</th>
-          <th>Manufacturer</th>
-          <th>Location</th>
-          <th>City</th>
-          <th>Delete</th>
-          <th>Edit</th>
-        </tr>
-        {data.getProducts.map((product) => (
+        <tbody>
           <tr>
-            <td>{product.name ? product.name : '(Empty)'}</td>
-            <td>{product.category ? product.category : '(Empty)'}</td>
-            <td>{product.manufacturer ? product.manufacturer : '(Empty)'}</td>
-            <td>{product.location ? product.location : '(Empty)'}</td>
-            <td>(Empty)</td>
-            <td>
-              <button>Delete</button>
-            </td>
-            <td>
-              <button>Edit</button>
-            </td>
+            <th>Product Name</th>
+            <th>Category</th>
+            <th>Manufacturer</th>
+            <th>Location</th>
+            <th>City</th>
+            <th>Delete</th>
+            <th>Edit</th>
           </tr>
-        ))}
+          {products.loading === false
+            ? products.data.getProducts.map((product) => (
+                <tr key={product.id}>
+                  <td>{product.name ? product.name : '(Empty)'}</td>
+                  <td>{product.category ? product.category : '(Empty)'}</td>
+                  <td>
+                    {product.manufacturer ? product.manufacturer : '(Empty)'}
+                  </td>
+                  <td>{product.location ? product.location : '(Empty)'}</td>
+                  <td>(Empty)</td>
+                  <td>
+                    <button>Delete</button>
+                  </td>
+                  <td>
+                    <button>Edit</button>
+                  </td>
+                </tr>
+              ))
+            : null}
+        </tbody>
       </table>
       <hr />
       {/* Form to add product */}
       <h1>Add a product</h1>
-      <label>Product Name*</label>
-      <input />
-      <br />
-      <label>Category</label>
-      <input />
-      <br />
-      <label>Manufacturer</label>
-      <input />
-      <br />
-      <label>Location</label>
-      <input />
-      <br />
-      <button>Submit</button>
+      <form>
+        <label>Product Name*</label>
+        <input
+          name="name"
+          value={createProductForm.name}
+          onChange={createProductHandler}
+        />
+        <br />
+        <label>Category</label>
+        <input
+          name="category"
+          value={createProductForm.category}
+          onChange={createProductHandler}
+        />
+        <br />
+        <label>Manufacturer</label>
+        <input
+          name="manufacturer"
+          value={createProductForm.manufacturer}
+          onChange={createProductHandler}
+        />
+        <br />
+        <label>Location</label>
+        <input
+          name="location"
+          value={createProductForm.locations}
+          onChange={createProductHandler}
+        />
+        <br />
+        <button>Submit</button>
+      </form>
+
       <hr />
       {/* Form to edit product  */}
       <h1>Edit a product</h1>
