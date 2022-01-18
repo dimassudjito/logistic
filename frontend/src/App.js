@@ -11,15 +11,6 @@ const GET_PRODUCTS = gql`
     }
   }
 `
-const GET_LOCATIONS = gql`
-  query GetLocations {
-    getLocations {
-      id
-      name
-      city
-    }
-  }
-`
 const CREATE_PRODUCT = gql`
   mutation CreateProduct($productInput: ProductInput) {
     createProduct(productInput: $productInput) {
@@ -44,6 +35,24 @@ const UPDATE_PRODUCT = gql`
     }
   }
 `
+const GET_LOCATIONS = gql`
+  query GetLocations {
+    getLocations {
+      id
+      name
+      city
+    }
+  }
+`
+const CREATE_LOCATION = gql`
+  mutation CreateLocation($locationInput: LocationInput) {
+    createLocation(locationInput: $locationInput) {
+      id
+      name
+      city
+    }
+  }
+`
 const emptyProductForm = {
   name: '',
   category: '',
@@ -64,7 +73,6 @@ function App() {
     useState(emptyLocationForm)
 
   const products = useQuery(GET_PRODUCTS)
-  const locations = useQuery(GET_LOCATIONS)
   const [createProduct] = useMutation(CREATE_PRODUCT, {
     refetchQueries: [GET_PRODUCTS]
   })
@@ -73,6 +81,11 @@ function App() {
   })
   const [deleteProduct] = useMutation(DELETE_PRODUCT, {
     refetchQueries: [GET_PRODUCTS]
+  })
+
+  const locations = useQuery(GET_LOCATIONS)
+  const [createLocation] = useMutation(CREATE_LOCATION, {
+    refetchQueries: [GET_LOCATIONS]
   })
 
   const createProductHandler = (evt) => {
@@ -261,7 +274,17 @@ function App() {
         </tbody>
       </table>
       <hr />
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          createLocation({
+            variables: {
+              locationInput: createLocationForm
+            }
+          })
+          setCreateLocationForm(emptyLocationForm)
+        }}
+      >
         <h1>Add a location</h1>
         <label>Location Name*</label>
         <input
