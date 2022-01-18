@@ -20,14 +20,17 @@ const CREATE_PRODUCT = gql`
     }
   }
 `
+const emptyCreateProductForm = {
+  name: '',
+  category: '',
+  manufacturer: '',
+  location: ''
+}
 
 function App() {
-  const [createProductForm, setCreateProductForm] = useState({
-    name: '',
-    category: '',
-    manufacturer: '',
-    location: ''
-  })
+  const [createProductForm, setCreateProductForm] = useState(
+    emptyCreateProductForm
+  )
 
   const products = useQuery(GET_PRODUCTS)
   const [createProduct] = useMutation(CREATE_PRODUCT, {
@@ -81,6 +84,7 @@ function App() {
         onSubmit={(e) => {
           e.preventDefault()
           createProduct({ variables: { productInput: createProductForm } })
+          setCreateProductForm(emptyCreateProductForm)
         }}
       >
         <label>Product Name*</label>
