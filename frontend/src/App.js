@@ -211,11 +211,6 @@ function App() {
         />
         <br />
         <label>Location</label>
-        {/* <input
-          name="location"
-          value={createProductForm.locations}
-          onChange={createProductHandler}
-        /> */}
         <select
           name="location"
           value={createProductForm.locations}
@@ -276,11 +271,20 @@ function App() {
         />
         <br />
         <label>Location</label>
-        <input
+        <select
           name="location"
           value={editProductForm.location}
           onChange={editProductHandler}
-        />
+        >
+          <option value="">Select a location</option>
+          {locations.loading === false
+            ? locations.data.getLocations.map((location) => (
+                <option key={location.id} value={location.id}>
+                  {location.name}, {location.city}
+                </option>
+              ))
+            : null}
+        </select>
         <br />
         <button>Submit</button>
       </form>
