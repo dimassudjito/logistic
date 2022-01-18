@@ -35,7 +35,9 @@ module.exports = {
     async deleteProduct(_: any, { productId }: { productId: string }) {
       try {
         const product = await Product.findById(productId)
-        await product.delete()
+        if (product) {
+          await product.delete()
+        }
         return 'Product deleted successfully'
       } catch (err: any) {
         throw new Error(err)
