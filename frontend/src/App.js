@@ -11,6 +11,15 @@ const GET_PRODUCTS = gql`
     }
   }
 `
+const GET_LOCATIONS = gql`
+  query GetLocations {
+    getLocations {
+      id
+      name
+      city
+    }
+  }
+`
 const CREATE_PRODUCT = gql`
   mutation CreateProduct($productInput: ProductInput) {
     createProduct(productInput: $productInput) {
@@ -48,6 +57,7 @@ function App() {
   const [editedProduct, setEditedProduct] = useState('')
 
   const products = useQuery(GET_PRODUCTS)
+  const locations = useQuery(GET_LOCATIONS)
   const [createProduct] = useMutation(CREATE_PRODUCT, {
     refetchQueries: [GET_PRODUCTS]
   })
@@ -71,6 +81,7 @@ function App() {
   return (
     <div>
       {/* Display list of products */}
+      <h1>Products List</h1>
       <table>
         <tbody>
           <tr>
@@ -217,6 +228,26 @@ function App() {
         <br />
         <button>Submit</button>
       </form>
+      <hr />
+      <h1>Locations List</h1>
+      <table>
+        <tbody>
+          <tr>
+            <th>ID</th>
+            <th>Location</th>
+            <th>City</th>
+          </tr>
+          {locations.loading === false
+            ? locations.data.getLocations.map((location) => (
+                <tr>
+                  <td>{location.id}</td>
+                  <td>{location.name}</td>
+                  <td>{location.city}</td>
+                </tr>
+              ))
+            : null}
+        </tbody>
+      </table>
       <hr />
       <form>
         <h1>Add a location</h1>
