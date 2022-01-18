@@ -8,6 +8,7 @@ const GET_PRODUCTS = gql`
       name
       category
       manufacturer
+      location
     }
   }
 `
@@ -114,6 +115,7 @@ function App() {
             <th>Product Name</th>
             <th>Category</th>
             <th>Manufacturer</th>
+            <th>Location ID</th>
             <th>Location</th>
             <th>City</th>
             <th>Delete</th>
@@ -129,6 +131,7 @@ function App() {
                     {product.manufacturer ? product.manufacturer : '(Empty)'}
                   </td>
                   <td>{product.location ? product.location : '(Empty)'}</td>
+                  <td>(Empty)</td>
                   <td>(Empty)</td>
                   <td>
                     <button
@@ -218,6 +221,7 @@ function App() {
             }
           })
           setEditProductForm(emptyProductForm)
+          setEditedProduct('')
         }}
       >
         <label>Selected product ID</label>
