@@ -14,9 +14,18 @@
 1. go to backend folder (cd backend)
 2. instal dependencies (npm install)
 3. start the server (npm run start)
+4. (optional) open the sandbox explorer in http://localhost:5000/
 
 - To run the frontend client:
 
 1. go to frontend folder (cd frontend)
 2. install dependencies (npm install)
 3. start the app (npm start)
+4. open the app in http://localhost:3000/
+
+---
+
+# Tech stack
+
+- Backend: Apollo server, Mongoose, GraphQL, MongoDB Atlas for database, TypeScript
+- Frontend: React, Apollo client
