@@ -25,12 +25,21 @@ module.exports = {
         }
       }
     ) {
-      if (name.trim() === '') {
-        throw new Error('Product name must not be empty')
+      try {
+        if (name.trim() === '') {
+          throw new Error('Product name must not be empty')
+        }
+        const newProduct = new Product({
+          name,
+          category,
+          manufacturer,
+          location
+        })
+        const product = await newProduct.save()
+        return product
+      } catch (err: any) {
+        throw new Error(err)
       }
-      const newProduct = new Product({ name, category, manufacturer, location })
-      const product = await newProduct.save()
-      return product
     },
     async deleteProduct(_: any, { productId }: { productId: string }) {
       try {
@@ -39,6 +48,35 @@ module.exports = {
           await product.delete()
         }
         return 'Product deleted successfully'
+      } catch (err: any) {
+        throw new Error(err)
+      }
+    },
+    async updateProduct(
+      _: any,
+      {
+        productId,
+        productInput
+      }: {
+        productId: string
+        productInput: {
+          name: string
+          category: string
+          manufacturer: string
+          location: string
+        }
+      }
+    ) {
+      try {
+        let product = await Product.findById(productId)
+        if (product) {
+          // udpate each attribute in product
+          for (const [key, val] of Object.entries(productInput)) {
+            product[key] = val
+          }
+          await product.save()
+          return product
+        }
       } catch (err: any) {
         throw new Error(err)
       }

@@ -20,5 +20,6 @@ module.exports = gql`
   type Mutation {
     createProduct(productInput: ProductInput): Product!
     deleteProduct(productId: ID!): String!
+    updateProduct(productId: ID!, productInput: ProductInput): Product!
   }
 `
