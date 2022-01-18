@@ -28,8 +28,8 @@ module.exports = {
       }
     ) {
       try {
-        if (productInput.name.trim() === '') {
-          throw new Error('Product name must not be empty')
+        if (!productInput.name || productInput.name.trim() === '') {
+          throw new Error('Product name must not be null or empty')
         }
         const newProduct = new Product(productInput)
         const product = await newProduct.save()

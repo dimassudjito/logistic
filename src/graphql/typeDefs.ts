@@ -31,6 +31,6 @@ module.exports = gql`
     createProduct(productInput: ProductInput): Product!
     deleteProduct(productId: ID!): String!
     updateProduct(productId: ID!, productInput: ProductInput): Product!
-    createLocation(locationInput: LocationInput): Location
+    createLocation(locationInput: LocationInput): Location!
   }
 `
