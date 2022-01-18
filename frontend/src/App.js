@@ -25,7 +25,16 @@ const DELETE_PRODUCT = gql`
     deleteProduct(productId: $productId)
   }
 `
-
+const UPDATE_PRODUCT = gql`
+  mutation UpdateProduct($productId: ID!, $productInput: ProductInput) {
+    updateProduct(productId: $productId, productInput: $productInput) {
+      name
+      category
+      manufacturer
+      location
+    }
+  }
+`
 const emptyProductForm = {
   name: '',
   category: '',
@@ -40,6 +49,9 @@ function App() {
 
   const products = useQuery(GET_PRODUCTS)
   const [createProduct] = useMutation(CREATE_PRODUCT, {
+    refetchQueries: [GET_PRODUCTS]
+  })
+  const [updateProduct] = useMutation(UPDATE_PRODUCT, {
     refetchQueries: [GET_PRODUCTS]
   })
   const [deleteProduct] = useMutation(DELETE_PRODUCT, {
@@ -152,7 +164,18 @@ function App() {
       {/* Form to edit product  */}
       <h1>Edit a product</h1>
       <p>Select a product from the product table</p>
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          updateProduct({
+            variables: {
+              productId: editedProduct,
+              productInput: editProductForm
+            }
+          })
+          setEditProductForm(emptyProductForm)
+        }}
+      >
         <label>Selected product ID</label>
         <input disabled value={editedProduct} />
         <br />
@@ -185,7 +208,9 @@ function App() {
         />
         <br />
         <button>Submit</button>
-        <hr />
+      </form>
+      <hr />
+      <form>
         <h1>Add a location</h1>
         <label>Location Name*</label>
         <input />
