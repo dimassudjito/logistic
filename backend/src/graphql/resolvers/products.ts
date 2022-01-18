@@ -43,8 +43,10 @@ module.exports = {
         const product = await Product.findById(productId)
         if (product) {
           await product.delete()
+          return 'Product deleted successfully'
+        } else {
+          throw new Error('Product not found')
         }
-        return 'Product deleted successfully'
       } catch (err: any) {
         throw new Error(err)
       }
@@ -68,6 +70,8 @@ module.exports = {
           }
           await product.save()
           return product
+        } else {
+          throw new Error('Product not found')
         }
       } catch (err: any) {
         throw new Error(err)
