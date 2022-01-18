@@ -211,11 +211,25 @@ function App() {
         />
         <br />
         <label>Location</label>
-        <input
+        {/* <input
           name="location"
           value={createProductForm.locations}
           onChange={createProductHandler}
-        />
+        /> */}
+        <select
+          name="location"
+          value={createProductForm.locations}
+          onChange={createProductHandler}
+        >
+          <option value="">Select a location</option>
+          {locations.loading === false
+            ? locations.data.getLocations.map((location) => (
+                <option key={location.id} value={location.id}>
+                  {location.name}, {location.city}
+                </option>
+              ))
+            : null}
+        </select>
         <br />
         <button type="submit">Submit</button>
       </form>
