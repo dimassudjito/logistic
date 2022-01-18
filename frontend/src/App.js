@@ -51,10 +51,17 @@ const emptyProductForm = {
   location: ''
 }
 
+const emptyLocationForm = {
+  name: '',
+  city: ''
+}
+
 function App() {
   const [createProductForm, setCreateProductForm] = useState(emptyProductForm)
   const [editProductForm, setEditProductForm] = useState(emptyProductForm)
   const [editedProduct, setEditedProduct] = useState('')
+  const [createLocationForm, setCreateLocationForm] =
+    useState(emptyLocationForm)
 
   const products = useQuery(GET_PRODUCTS)
   const locations = useQuery(GET_LOCATIONS)
@@ -76,6 +83,11 @@ function App() {
   const editProductHandler = (evt) => {
     const value = evt.target.value
     setEditProductForm({ ...editProductForm, [evt.target.name]: value })
+  }
+
+  const createLocationHandler = (evt) => {
+    const value = evt.target.value
+    setCreateLocationForm({ ...createLocationForm, [evt.target.name]: value })
   }
 
   return (
@@ -239,7 +251,7 @@ function App() {
           </tr>
           {locations.loading === false
             ? locations.data.getLocations.map((location) => (
-                <tr>
+                <tr key={location.id}>
                   <td>{location.id}</td>
                   <td>{location.name}</td>
                   <td>{location.city}</td>
@@ -252,10 +264,18 @@ function App() {
       <form>
         <h1>Add a location</h1>
         <label>Location Name*</label>
-        <input />
+        <input
+          name="name"
+          value={createLocationForm.name}
+          onChange={createLocationHandler}
+        />
         <br />
         <label>City</label>
-        <input />
+        <input
+          name="city"
+          value={createLocationForm.city}
+          onChange={createLocationHandler}
+        />
         <br />
         <button type="submit">Submit</button>
       </form>
