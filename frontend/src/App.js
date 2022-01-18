@@ -20,6 +20,12 @@ const CREATE_PRODUCT = gql`
     }
   }
 `
+const DELETE_PRODUCT = gql`
+  mutation DeleteProduct($productId: ID!) {
+    deleteProduct(productId: $productId)
+  }
+`
+
 const emptyCreateProductForm = {
   name: '',
   category: '',
@@ -34,6 +40,9 @@ function App() {
 
   const products = useQuery(GET_PRODUCTS)
   const [createProduct] = useMutation(CREATE_PRODUCT, {
+    refetchQueries: [GET_PRODUCTS]
+  })
+  const [deleteProduct] = useMutation(DELETE_PRODUCT, {
     refetchQueries: [GET_PRODUCTS]
   })
 
@@ -67,7 +76,14 @@ function App() {
                   <td>{product.location ? product.location : '(Empty)'}</td>
                   <td>(Empty)</td>
                   <td>
-                    <button>Delete</button>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault()
+                        deleteProduct({ variables: { productId: product.id } })
+                      }}
+                    >
+                      Delete
+                    </button>
                   </td>
                   <td>
                     <button>Edit</button>
