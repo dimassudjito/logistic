@@ -1,5 +1,12 @@
 const Product = require('../../models/Product')
 
+type ProductInput = {
+  name: String
+  category?: String
+  manufacturer?: String
+  location?: String
+}
+
 module.exports = {
   Query: {
     async getProducts() {
@@ -17,12 +24,7 @@ module.exports = {
       {
         productInput
       }: {
-        productInput: {
-          name: string
-          category: string
-          manufacturer: string
-          location: string
-        }
+        productInput: ProductInput
       }
     ) {
       try {
@@ -54,12 +56,7 @@ module.exports = {
         productInput
       }: {
         productId: string
-        productInput: {
-          name: string
-          category: string
-          manufacturer: string
-          location: string
-        }
+        productInput: ProductInput
       }
     ) {
       try {
