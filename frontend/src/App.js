@@ -9,6 +9,11 @@ const GET_PRODUCTS = gql`
       category
       manufacturer
       location
+      locationInfo {
+        city
+        name
+        id
+      }
     }
   }
 `
@@ -131,8 +136,16 @@ function App() {
                     {product.manufacturer ? product.manufacturer : '(Empty)'}
                   </td>
                   <td>{product.location ? product.location : '(Empty)'}</td>
-                  <td>(Empty)</td>
-                  <td>(Empty)</td>
+                  <td>
+                    {product.locationInfo
+                      ? product.locationInfo.name
+                      : '(Empty)'}
+                  </td>
+                  <td>
+                    {product.locationInfo && product.locationInfo.city
+                      ? product.locationInfo.city
+                      : '(Empty)'}
+                  </td>
                   <td>
                     <button
                       onClick={(e) => {
