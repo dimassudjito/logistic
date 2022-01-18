@@ -30,7 +30,9 @@ function App() {
   })
 
   const products = useQuery(GET_PRODUCTS)
-  const [createProduct, createProductMetadata] = useMutation(CREATE_PRODUCT)
+  const [createProduct] = useMutation(CREATE_PRODUCT, {
+    refetchQueries: [GET_PRODUCTS]
+  })
 
   const createProductHandler = (evt) => {
     const value = evt.target.value
@@ -75,7 +77,12 @@ function App() {
       <hr />
       {/* Form to add product */}
       <h1>Add a product</h1>
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          createProduct({ variables: { productInput: createProductForm } })
+        }}
+      >
         <label>Product Name*</label>
         <input
           name="name"
@@ -104,7 +111,7 @@ function App() {
           onChange={createProductHandler}
         />
         <br />
-        <button>Submit</button>
+        <button type="submit">Submit</button>
       </form>
 
       <hr />
